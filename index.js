@@ -4,23 +4,17 @@ const cors = require('cors');
 const app = express();
 const port = 3001;
 
-// Middleware
-<<<<<<< HEAD
-app.use(express.json());
-app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-=======
+// CORS configuration
 const corsOptions = {
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
->>>>>>> d0a7dda (fix send-email cors)
     credentials: true
 };
 
+// Middleware
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions))
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
@@ -42,7 +36,7 @@ app.use('/api/previsions', previsions.getAllPrevisions);
 app.use('/api/medical-center', medicalCenter.getAllMedicalCenter);
 app.use('/api/specialty', specialty.getAllSpecialty);
 app.use('/api/rut', rut.validationRut);
-app.use('/api/send-email', email.sendEmail);
+app.post('/api/send-email', email.sendEmail);
 
 // Root route
 app.get('/', (req, res) => {
