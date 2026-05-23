@@ -1,66 +1,116 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
+
 const prisma = new PrismaClient();
 
 async function main() {
+  console.log("Starting seed");
 
-    const doctors = [
-        { id: 1, name: 'Carlos', lastName: 'García', email: 'doctor1@gmail.com', password: 'password123', specialtyId: 1, centerId: 1 },
-        { id: 2, name: 'María', lastName: 'Fernández', email: 'doctor2@gmail.com', password: 'password123', specialtyId: 2, centerId: 2 },
-        { id: 3, name: 'Juan', lastName: 'López', email: 'doctor3@gmail.com', password: 'password123', specialtyId: 3, centerId: 3 },
-        { id: 4, name: 'Ana', lastName: 'Martínez', email: 'doctor4@gmail.com', password: 'password123', specialtyId: 4, centerId: 4 },
-        { id: 5, name: 'Luis', lastName: 'Sánchez', email: 'doctor5@gmail.com', password: 'password123', specialtyId: 5, centerId: 5 },
-        { id: 6, name: 'Laura', lastName: 'Pérez', email: 'doctor6@gmail.com', password: 'password123', specialtyId: 6, centerId: 6 },
-        { id: 7, name: 'Miguel', lastName: 'Ramírez', email: 'doctor7@gmail.com', password: 'password123', specialtyId: 1, centerId: 1 },
-        { id: 8, name: 'Sofía', lastName: 'Torres', email: 'doctor8@gmail.com', password: 'password123', specialtyId: 2, centerId: 2 },
-        { id: 9, name: 'David', lastName: 'Vargas', email: 'doctor9@gmail.com', password: 'password123', specialtyId: 3, centerId: 3 },
-        { id: 10, name: 'Lucía', lastName: 'Castillo', email: 'doctor10@gmail.com', password: 'password123', specialtyId: 4, centerId: 4 },
-        { id: 11, name: 'José', lastName: 'Molina', email: 'doctor11@gmail.com', password: 'password123', specialtyId: 5, centerId: 5 },
-        { id: 12, name: 'Patricia', lastName: 'Rojas', email: 'doctor12@gmail.com', password: 'password123', specialtyId: 6, centerId: 6 },
-        { id: 13, name: 'Andrés', lastName: 'Navarro', email: 'doctor13@gmail.com', password: 'password123', specialtyId: 1, centerId: 1 },
-        { id: 14, name: 'Gabriela', lastName: 'Suárez', email: 'doctor14@gmail.com', password: 'password123', specialtyId: 2, centerId: 2 },
-        { id: 15, name: 'Ricardo', lastName: 'Hernández', email: 'doctor15@gmail.com', password: 'password123', specialtyId: 3, centerId: 3 },
-        { id: 16, name: 'Natalia', lastName: 'Morales', email: 'doctor16@gmail.com', password: 'password123', specialtyId: 4, centerId: 4 },
-        { id: 17, name: 'Pedro', lastName: 'Reyes', email: 'doctor17@gmail.com', password: 'password123', specialtyId: 5, centerId: 5 },
-        { id: 18, name: 'Elena', lastName: 'Silva', email: 'doctor18@gmail.com', password: 'password123', specialtyId: 6, centerId: 6 },
-        { id: 19, name: 'Francisco', lastName: 'Ortega', email: 'doctor19@gmail.com', password: 'password123', specialtyId: 1, centerId: 1 },
-        { id: 20, name: 'Paula', lastName: 'Cruz', email: 'doctor20@gmail.com', password: 'password123', specialtyId: 2, centerId: 2 },
-  	];
+  await prisma.prevision.createMany({
+    data: [
+      { name: "Fonasa" },
+      { name: "Isapre" }
+    ],
+    skipDuplicates: true
+  });
 
-	const patients = [
-		{ id: 1, rut: '11.111.111-1', name: 'Juan', lastName: 'Pérez', previsionId: 1 },
-		{ id: 2, rut: '22.222.222-2', name: 'María', lastName: 'González', previsionId: 2 },
-		{ id: 3, rut: '33.333.333-3', name: 'Carlos', lastName: 'Martínez', previsionId: 1 },
-		{ id: 4, rut: '44.444.444-4', name: 'Ana', lastName: 'Hernández', previsionId: 2 },
-		{ id: 5, rut: '55.555.555-5', name: 'Pedro', lastName: 'Soto', previsionId: 1 },
-		{ id: 6, rut: '66.666.666-6', name: 'Luisa', lastName: 'Ramírez', previsionId: 2 },
-		{ id: 7, rut: '77.777.777-7', name: 'Jorge', lastName: 'López', previsionId: 1 },
-		{ id: 8, rut: '88.888.888-8', name: 'Claudia', lastName: 'Mendoza', previsionId: 2 },
-		{ id: 9, rut: '99.999.999-9', name: 'Manuel', lastName: 'Perez', previsionId: 2 },
-	];
+  await prisma.specialty.createMany({
+    data: [
+      { name: "Cardiología" },
+      { name: "Dermatología" },
+      { name: "Pediatría" },
+      { name: "Neurología" },
+      { name: "Traumatología" },
+      { name: "Medicina General" },
+      { name: "Urología" },
+      { name: "Oftalmología" },
+      { name: "Radiología" },
+      { name: "Ginecología y Obstetricia" },
+      { name: "Otorrinolaringología" }
+    ],
+    skipDuplicates: true
+  });
 
-	const hashedDoctors = await Promise.all(doctors.map(async (doctor) => {
-        const hashedPassword = await bcrypt.hash(doctor.password, 10); // Encriptar la contraseña
-        return { ...doctor, password: hashedPassword }; // Reemplazar la contraseña por la encriptada
-    }));
-	
-	await prisma.patient.createMany({
-		data: patients,
-		skipDuplicates: true, 
-	});
-  
+  await prisma.medicalCenter.createMany({
+    data: [
+      { commune: "Santiago" },
+      { commune: "Providencia" },
+      { commune: "Las Condes" },
+      { commune: "Ñuñoa" },
+      { commune: "Maipú" },
+      { commune: "La Florida" },
+      { commune: "La Pintana" },
+      { commune: "Macul" },
+      { commune: "Puente Alto" },
+      { commune: "San Bernardo" },
+      { commune: "Huechuraba" }
+    ],
+    skipDuplicates: true
+  });
 
-  	await prisma.doctor.createMany({
-    	data: hashedDoctors,
-    	skipDuplicates: true,
-  	});
+  // =========================
+  // 4. DOCTORS
+  // =========================
+  const doctors = [
+    { name: 'Carlos', lastName: 'García', email: 'doctor1@gmail.com', password: 'password123', specialtyId: 1, centerId: 1 },
+    { name: 'María', lastName: 'Fernández', email: 'doctor2@gmail.com', password: 'password123', specialtyId: 2, centerId: 2 },
+    { name: 'Juan', lastName: 'López', email: 'doctor3@gmail.com', password: 'password123', specialtyId: 3, centerId: 3 },
+    { name: 'Ana', lastName: 'Martínez', email: 'doctor4@gmail.com', password: 'password123', specialtyId: 4, centerId: 4 },
+    { name: 'Luis', lastName: 'Sánchez', email: 'doctor5@gmail.com', password: 'password123', specialtyId: 5, centerId: 5 },
+    { name: 'Antonio', lastName: 'Reiman', email: 'doctor6@gmail.com', password: 'password123', specialtyId: 3, centerId: 5 },
+    { name: 'Laura', lastName: 'Pérez', email: 'doctor7@gmail.com', password: 'password123', specialtyId: 6, centerId: 5 },
+    { name: 'Gustavo', lastName: 'Labraña', email: 'doctor8@gmail.com', password: 'password123', specialtyId: 7, centerId: 7 },
+    { name: 'Josefa', lastName: 'Masferrer', email: 'doctor9@gmail.com', password: 'password123', specialtyId: 9, centerId: 8 },
+    { name: 'Francisca', lastName: 'Díaz', email: 'doctor10@gmail.com', password: 'password123', specialtyId: 2, centerId: 3 },
+    { name: 'Sofía', lastName: 'Pérez', email: 'doctor11@gmail.com', password: 'password123', specialtyId: 3, centerId: 9 },
+    { name: 'Pablo', lastName: 'Torres', email: 'doctor12@gmail.com', password: 'password123', specialtyId: 5, centerId: 1 },
+    { name: 'Daniel', lastName: 'Navarro', email: 'doctor13@gmail.com', password: 'password123', specialtyId: 6, centerId: 5 },
+    { name: 'Valentina', lastName: 'Lautaro', email: 'doctor14@gmail.com', password: 'password123', specialtyId: 3, centerId: 6 },
+    { name: 'Nora', lastName: 'Patiño', email: 'doctor15@gmail.com', password: 'password123', specialtyId: 5, centerId: 7 },
+    { name: 'Maribel', lastName: 'Herrera', email: 'doctor16@gmail.com', password: 'password123', specialtyId: 3, centerId: 5 },
+    { name: 'Karym', lastName: 'Vilches', email: 'doctor17@gmail.com', password: 'password123', specialtyId: 6, centerId: 3 },
+    { name: 'Rodrigo', lastName: 'Leal', email: 'doctor18@gmail.com', password: 'password123', specialtyId: 5, centerId: 9 },
+    { name: 'Javier', lastName: 'Carvajal', email: 'doctor19@gmail.com', password: 'password123', specialtyId: 7, centerId: 6 },
+    { name: 'Camila', lastName: 'De souza', email: 'doctor20@gmail.com', password: 'password123', specialtyId: 8, centerId: 8 },
+    { name: 'Camilo', lastName: 'Rojas', email: 'doctor21@gmail.com', password: 'password123', specialtyId: 9, centerId: 5 },
+    { name: 'Sergio', lastName: 'Tapia', email: 'doctor22@gmail.com', password: 'password123', specialtyId: 6, centerId: 7 }
+  ];
 
-  	console.log('Doctors and Patients seeded successfully');
+  const hashedDoctors = doctors.map(d => ({
+    ...d,
+    password: bcrypt.hashSync(d.password, 10)
+  }));
+
+  await prisma.doctor.createMany({
+    data: hashedDoctors,
+    skipDuplicates: true
+  });
+
+  // =========================
+  // 5. PATIENTS
+  // =========================
+  await prisma.patient.createMany({
+    data: [
+      { rut: '11.111.111-1', name: 'Juan', lastName: 'Pérez', previsionId: 1 },
+      { rut: '22.222.222-2', name: 'María', lastName: 'González', previsionId: 2 },
+      { rut: '33.333.333-3', name: 'Carlos', lastName: 'Martínez', previsionId: 1 },
+      { rut: '44.444.444-4', name: 'Ana', lastName: 'Hernández', previsionId: 2 },
+      { rut: '55.555.555-5', name: 'Pedro', lastName: 'Soto', previsionId: 1 },
+      { rut: '66.666.666-6', name: 'Luisa', lastName: 'Ramírez', previsionId: 2 },
+      { rut: '77.777.777-7', name: 'Crstibal', lastName: 'Rojas', previsionId: 1 },
+      { rut: '88.888.888-8', name: 'Fernado', lastName: 'Soto', previsionId: 2 },
+      { rut: '99.999.999-9', name: 'Marcelo', lastName: 'Leal', previsionId: 1 },
+      { rut: '00.000.000-0', name: 'Ana', lastName: 'Caserez', previsionId: 2 },
+    ],
+    skipDuplicates: true
+  });
+
+  console.log("✅ Seed completed successfully!");
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Seed error:", e);
     process.exit(1);
   })
   .finally(async () => {

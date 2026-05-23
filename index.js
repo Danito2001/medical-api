@@ -5,12 +5,24 @@ const app = express();
 const port = 3001;
 
 // Middleware
+<<<<<<< HEAD
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+=======
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+>>>>>>> d0a7dda (fix send-email cors)
     credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions))
+
+app.use(express.json());
 
 // API Routes
 const doctorRoutes = require('./api/doctor');
